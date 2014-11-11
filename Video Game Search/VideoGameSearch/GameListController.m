@@ -24,11 +24,11 @@ typedef NS_ENUM(NSInteger, GameSubviewsIndex) {
 
 
 @interface GameListController () <VGSDataModificationDelegate,
-                                    UITableViewDataSource,
-                                    UITableViewDelegate,
-                                    UISearchBarDelegate,
-                                    UISearchControllerDelegate,
-                                    UISearchResultsUpdating>
+UITableViewDataSource,
+UITableViewDelegate,
+UISearchBarDelegate,
+UISearchControllerDelegate,
+UISearchResultsUpdating>
 
 @property NSMutableArray *gameList;
 @property NSDictionary *lastSearchTerm;
@@ -81,7 +81,7 @@ typedef NS_ENUM(NSInteger, GameSubviewsIndex) {
     NSMutableDictionary * requestParams = [[GiantBomb gBasebHttpUrlParams] mutableCopy];
     NSString * searchTerm = GameSearchDefaultParam;
     searchTerm = [searchTerm stringByAddingPercentEscapesUsingEncoding:
-     NSASCIIStringEncoding];
+                  NSASCIIStringEncoding];
     [requestParams addEntriesFromDictionary:@{GameHttpQueryParam:searchTerm}]; // Default Search terms
     [self requestVideoGames:requestParams];
 }
@@ -93,7 +93,7 @@ typedef NS_ENUM(NSInteger, GameSubviewsIndex) {
     refreshControl.tintColor = [UIColor whiteColor];
     [refreshControl addTarget:self
                        action:@selector(refreshGameList)
-                  forControlEvents:UIControlEventValueChanged];
+             forControlEvents:UIControlEventValueChanged];
     [gameTableView addSubview:refreshControl];
 }
 
@@ -118,6 +118,8 @@ typedef NS_ENUM(NSInteger, GameSubviewsIndex) {
 
 - (void)updateGameList:(GiantBomb *)searchResults
 {
+    [self invokeRefreshControl];
+    
     searchController.active = NO;
     if (searchResults && searchResults.results && searchResults.results.count > 0) {
         gameList = [searchResults.results mutableCopy];
@@ -129,12 +131,14 @@ typedef NS_ENUM(NSInteger, GameSubviewsIndex) {
         nomatchesView.hidden = NO;
     }
     [gameTableView reloadData];
-    [self reloadData];
     
 }
 
 - (void) disableNetworkIndicatorWithErrorMessage:(NSString*)message
 {
+    [self invokeRefreshControl];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    
     if (message.length > 0) {
         gameList = [@[] mutableCopy];
         [gameTableView reloadData];
@@ -146,12 +150,11 @@ typedef NS_ENUM(NSInteger, GameSubviewsIndex) {
     } else {
         nomatchesView.hidden = YES;
     }
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     [self styleNavigationBarWithFontName:@"GillSans-Bold"];
     
     self.gameTableView.dataSource = self;
@@ -167,11 +170,8 @@ typedef NS_ENUM(NSInteger, GameSubviewsIndex) {
     gameDetailViewController = (GameListDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
 }
 
-- (void)reloadData
+- (void)invokeRefreshControl
 {
-    // Reload table data
-    [gameTableView reloadData];
-    
     // End the refreshing
     if (refreshControl) {
         
@@ -208,7 +208,7 @@ typedef NS_ENUM(NSInteger, GameSubviewsIndex) {
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-
+    
     // restore the searchController's active state
     if (searchControllerWasActive) {
         self.searchController.active = self.searchControllerWasActive;
@@ -301,7 +301,7 @@ typedef NS_ENUM(NSInteger, GameSubviewsIndex) {
 
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController
 {
-   VGSLogInfo(@"updateSearchResultsForSearchController");
+    VGSLogInfo(@"updateSearchResultsForSearchController");
 }
 
 - (void) searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
@@ -377,7 +377,7 @@ typedef NS_ENUM(NSInteger, GameSubviewsIndex) {
     [menuButton setAccessibilityLabel:@"menuButton"];
     /// Allows to add multiple buttons in the future
     [self.navigationItem setRightBarButtonItems:@[menuButton] animated:YES];
-
+    
 }
 
 - (void)configureNoMatchFoundView
