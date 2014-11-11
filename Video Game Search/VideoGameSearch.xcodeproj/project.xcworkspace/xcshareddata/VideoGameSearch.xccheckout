@@ -5,7 +5,7 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>4B0D80E0-412C-45EC-98A1-265808379500</string>
+	<string>AF92895A-500D-4C41-9106-8DF2B372CFD4</string>
 	<key>IDESourceControlProjectName</key>
 	<string>VideoGameSearch</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
@@ -14,11 +14,11 @@
 		<string>https://github.com/vincethecoder/bag-of-tricks.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>VideoGameSearch.xcodeproj</string>
+	<string>Video Game Search/VideoGameSearch.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>454B068A00FFC22D38A9F314B4CFFE93A3EC760F</key>
-		<string>../..</string>
+		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/vincethecoder/bag-of-tricks.git</string>
