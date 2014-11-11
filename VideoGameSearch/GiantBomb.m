@@ -33,7 +33,6 @@
                             searchRecord = [SearchResult initWithDicitonary:resultData];
                             [refinedSearchResults addObject:searchRecord];
                         }
-                        
                     }
                 }
                 [self setResults: refinedSearchResults];

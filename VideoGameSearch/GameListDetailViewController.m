@@ -25,10 +25,12 @@
 - (void)configureView {
     self.detailDescriptionLabel.text = @"";
     NSString *strURL = @"http://www.giantbomb.com/404";
+    NSString *navTitle = @"Giant Bomb - 404";
     if (selectedGame) {
         strURL = selectedGame.detailURL;
-        self.navigationItem.title = selectedGame.name;
+        navTitle = selectedGame.name;
     }
+    self.navigationItem.title = navTitle;
     //load url into webview
     NSURL *url = [NSURL URLWithString:strURL];
     NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];

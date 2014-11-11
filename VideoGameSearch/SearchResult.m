@@ -11,6 +11,7 @@
 
 @interface SearchResult() {
     NSDateFormatter *dateFormat;
+    NSAttributedString *parsedString;
 }
 @end
 
@@ -96,7 +97,7 @@
         return htmlString;
     }
     
-    NSAttributedString *parsedString = [[NSAttributedString alloc] initWithData:
+    parsedString = [[NSAttributedString alloc] initWithData:
                                             [htmlString dataUsingEncoding:NSUTF8StringEncoding]
                                             options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
                                                       NSCharacterEncodingDocumentAttribute: @(NSUTF8StringEncoding)}
