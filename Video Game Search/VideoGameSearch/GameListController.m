@@ -141,7 +141,7 @@ UISearchResultsUpdating>
     if (searchResults && searchResults.results && searchResults.results.count > 0) {
         gameList = [searchResults.results mutableCopy];
     }
-    
+
     if (gameList.count > 0) {
         nomatchesView.hidden = YES;
     } else {
@@ -208,7 +208,7 @@ UISearchResultsUpdating>
 {
     resultsTableController = [[GameSearchResultsController alloc] init];
     searchController = [[UISearchController alloc] initWithSearchResultsController:resultsTableController];
-    searchController.searchResultsUpdater = self;
+    searchController.searchResultsUpdater = self; 
     [searchController.searchBar sizeToFit];
     searchController.searchBar.placeholder = NSLocalizedString(@"Ex. Nintendo, PS4 or xBox ONE", @"Sample Search Terms");
     gameTableView.tableHeaderView = searchController.searchBar;
