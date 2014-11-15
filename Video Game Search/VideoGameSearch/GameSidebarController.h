@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface GameSidebarController : UITableViewController
+@property (weak, nonatomic) IBOutlet UITextField *searchTextField;
 
 @end

@@ -14,14 +14,35 @@
 
 @implementation GameSidebarController
 
+@synthesize searchTextField;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    [searchTextField setLeftViewMode:UITextFieldViewModeAlways];
+    UIImageView *searchImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"search.png"]];
+    CGRect rect = CGRectMake(0, 0, 15, 15);
+    searchImage.image = [self imageWithImage:searchImage.image scaledToRect:rect];
+    searchImage.frame = CGRectMake(0.0f, 0.0f, searchImage.image.size.width + 10.0f, searchImage.image.size.height + 10.0f);
+    searchImage.contentMode = UIViewContentModeRight;
+    searchTextField.leftView = searchImage;
+    
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
+
+- (UIImage *)imageWithImage:(UIImage *)image scaledToRect:(CGRect)rect
+{
+    UIGraphicsBeginImageContext( rect.size );
+    [image drawInRect:rect];
+    UIImage *picture1 = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    NSData *imageData = UIImagePNGRepresentation(picture1);
+    return [UIImage imageWithData:imageData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -31,17 +52,17 @@
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 0;
-}
+//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+//#warning Potentially incomplete method implementation.
+//    // Return the number of sections.
+//    return 0;
+//}
+//
+//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+//#warning Incomplete method implementation.
+//    // Return the number of rows in the section.
+//    return 0;
+//}
 
 /*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
