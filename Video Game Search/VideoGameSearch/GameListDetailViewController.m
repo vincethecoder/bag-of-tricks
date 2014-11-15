@@ -7,6 +7,7 @@
 //
 
 #import "GameListDetailViewController.h"
+#import "VGSConstants.h"
 
 @implementation GameListDetailViewController
 
@@ -21,6 +22,20 @@
         [self configureView];
     }
 }
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    if (IS_IPHONE && !IS_IPHONE_6PLUS) {
+        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style: UIBarButtonItemStyleDone target:self action:@selector(Back)];
+        self.navigationItem.rightBarButtonItem = backButton;
+    }
+}
+
+- (IBAction)Back
+{
+    [self dismissViewControllerAnimated:YES completion:nil]; // ios 6
+}
+
 
 - (void)configureView {
     self.detailDescriptionLabel.text = @"";

@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "GameListDetailViewController.h"
+#import "VGSConstants.h"
 
 @interface AppDelegate () <UISplitViewControllerDelegate>
 
@@ -22,6 +23,11 @@
     UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
     navigationController.topViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem;
     splitViewController.delegate = self;
+    
+    if (IS_IPHONE && !IS_IPHONE_6PLUS) {
+        [self.window setRootViewController:[VGSIPhoneStoryBoard instantiateViewControllerWithIdentifier:@"SWRevealViewController"]];
+        [self.window makeKeyAndVisible];
+    }
     return YES;
 }
 

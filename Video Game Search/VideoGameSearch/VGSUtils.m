@@ -11,7 +11,7 @@
 #pragma mark - Globals
 NSString * GameCellIdentifier       = @"GameCell";
 NSString * GameDetailIdentifier     = @"showDetail";
-NSString * GameSearchDefaultParam   = @""; //Examples Video Games, Nintendo, xBox ONE, PS4
+NSString * GameSearchDefaultParam   = @"Mortal Kombat"; //Examples Video Games, Nintendo, xBox ONE, PS4
 NSString * GameHttpQueryParam       = @"query";
 
 @implementation VGSUtils

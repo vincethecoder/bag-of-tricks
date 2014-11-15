@@ -11,6 +11,13 @@
 /// Typedeffed result blocks that are call back functions
 typedef void (^VGSHttpRequestBlock)(NSHTTPURLResponse *httpResponse, NSData *data, NSError *error);
 
+/// Storyboard related Macros
+#define VGSIPhoneStoryBoard [UIStoryboard storyboardWithName:@"Main" bundle:nil]
+
+/// Determine device type
+#define IS_IPHONE (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+#define IS_IPHONE_6PLUS (IS_IPHONE && [[UIScreen mainScreen] nativeScale] == 3.0f)
+
 /// Http request time out - in seconds
 #define HTTP_REQUEST_TIMEOUT 60
 

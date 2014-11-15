@@ -9,6 +9,7 @@
 #import "GameListController.h"
 #import "GameListDetailViewController.h"
 #import "GameSearchResultsController.h"
+#import "SWRevealViewController.h"
 
 #import "GameCell.h"
 #import "SearchResult.h"
@@ -319,8 +320,8 @@ typedef NS_ENUM(NSInteger, GameSubviewsIndex) {
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:GameDetailIdentifier]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSDate *object = self.gameList[indexPath.row];
-        GameListDetailViewController *controller = (GameListDetailViewController *)[[segue destinationViewController] topViewController];
+        NSArray *object = self.gameList[indexPath.row];
+        GameListDetailViewController *controller  = (GameListDetailViewController *)[[segue destinationViewController] topViewController];
         [controller setDetailItem:object];
         [controller setSelectedGame:self.gameList[indexPath.row]];
         controller.navigationItem.leftBarButtonItem = self.splitViewController.displayModeButtonItem;
@@ -358,26 +359,27 @@ typedef NS_ENUM(NSInteger, GameSubviewsIndex) {
 
 - (void)styleNavigationBarWithFontName:(NSString*)navigationTitleFont
 {
-    UIColor* color = [UIColor colorWithRed:65.0/255 green:75.0/255 blue:89.0/255 alpha:1.0];
+    UIColor *color = [UIColor colorWithRed:65.0/255 green:75.0/255 blue:89.0/255 alpha:1.0];
     
     [VGSUtils styleNavigationBar:self.navigationController.navigationBar withFontName:navigationTitleFont andColor:color];
     
-    UIImageView* logoView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ql_logo.png"]];
+    UIImageView *logoView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ql_logo.png"]];
     logoView.frame = CGRectMake(0, 0, 48, 40);
-    
-    UIBarButtonItem* mainLogo = [[UIBarButtonItem alloc] initWithCustomView:logoView];
+    UIBarButtonItem *mainLogo = [[UIBarButtonItem alloc] initWithCustomView:logoView];
     self.navigationItem.leftBarButtonItem = mainLogo;
     
-    UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button setImage:[UIImage imageNamed:@"menu48.png"] forState:UIControlStateNormal];
-    [button setFrame:CGRectMake(0, 0, 28.0f, 24.0f)];
-    
-    UIBarButtonItem *menuButton = menuButton = [[UIBarButtonItem alloc] initWithCustomView:button];
-    [menuButton setIsAccessibilityElement:YES];
-    [menuButton setAccessibilityLabel:@"menuButton"];
-    /// Allows to add multiple buttons in the future
-    [self.navigationItem setRightBarButtonItems:@[menuButton] animated:YES];
-
+    if (IS_IPHONE && !IS_IPHONE_6PLUS) {
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button setImage:[UIImage imageNamed:@"menu48.png"] forState:UIControlStateNormal];
+        [button setFrame:CGRectMake(0, 0, 28.0f, 24.0f)];
+        [button addTarget:self.revealViewController action:@selector(rightRevealToggle:) forControlEvents:UIControlEventTouchUpInside];
+        
+        UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithCustomView:button];
+        [menuButton setIsAccessibilityElement:YES];
+        [menuButton setAccessibilityLabel:@"menuButton"];
+        /// Allows to add multiple buttons in the future
+        [self.navigationItem setRightBarButtonItems:@[menuButton] animated:YES];
+    }
 }
 
 - (void)configureNoMatchFoundView
