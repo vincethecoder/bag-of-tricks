@@ -220,7 +220,7 @@
         <!--Sidebar-->
         <scene sceneID="NR8-t8-p5Q">
             <objects>
-                <tableViewController storyboardIdentifier="SidebarController" title="Sidebar" id="tjy-kO-UT3" customClass="SidebarViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="SidebarController" title="Sidebar" id="tjy-kO-UT3" customClass="GameSidebarController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="7yO-bo-S49">
                         <rect key="frame" x="0.0" y="20" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

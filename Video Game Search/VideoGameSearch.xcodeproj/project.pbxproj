@@ -43,6 +43,7 @@
 		295B2DFE1A0F868F002F95B0 /* menu48.png in Resources */ = {isa = PBXBuildFile; fileRef = 295B2DFD1A0F868F002F95B0 /* menu48.png */; };
 		295B2DFF1A0F868F002F95B0 /* menu48.png in Resources */ = {isa = PBXBuildFile; fileRef = 295B2DFD1A0F868F002F95B0 /* menu48.png */; };
 		A8B831B11A16D97F00047244 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8B831B01A16D97F00047244 /* SWRevealViewController.m */; };
+		A8B831B81A17F2D900047244 /* GameSidebarController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8B831B71A17F2D900047244 /* GameSidebarController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -97,6 +98,8 @@
 		295B2DFD1A0F868F002F95B0 /* menu48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu48.png; sourceTree = "<group>"; };
 		A8B831AF1A16D97F00047244 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		A8B831B01A16D97F00047244 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
+		A8B831B61A17F2D900047244 /* GameSidebarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameSidebarController.h; sourceTree = "<group>"; };
+		A8B831B71A17F2D900047244 /* GameSidebarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameSidebarController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -216,6 +219,7 @@
 		295B2DCD1A0ED40C002F95B0 /* SearchControllers */ = {
 			isa = PBXGroup;
 			children = (
+				A8B831B21A17F1F700047244 /* Sidebar */,
 				295B2DF01A0ED5E8002F95B0 /* GameCell */,
 				295B2D9E1A0ECEE3002F95B0 /* GameListController.h */,
 				295B2D9F1A0ECEE3002F95B0 /* GameListController.m */,
@@ -293,6 +297,15 @@
 				A8B831B01A16D97F00047244 /* SWRevealViewController.m */,
 			);
 			name = Library;
+			sourceTree = "<group>";
+		};
+		A8B831B21A17F1F700047244 /* Sidebar */ = {
+			isa = PBXGroup;
+			children = (
+				A8B831B61A17F2D900047244 /* GameSidebarController.h */,
+				A8B831B71A17F2D900047244 /* GameSidebarController.m */,
+			);
+			name = Sidebar;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -415,6 +428,7 @@
 				295B2DD21A0ED4C0002F95B0 /* VGSHttpRequest.m in Sources */,
 				295B2DE21A0ED54D002F95B0 /* VGSConstants.m in Sources */,
 				295B2DA31A0ECEE3002F95B0 /* GameListDetailViewController.m in Sources */,
+				A8B831B81A17F2D900047244 /* GameSidebarController.m in Sources */,
 				295B2DF71A0F6FE4002F95B0 /* GameSearchResultsController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

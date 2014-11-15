@@ -379,6 +379,8 @@ UISearchResultsUpdating>
         [menuButton setAccessibilityLabel:@"menuButton"];
         /// Allows to add multiple buttons in the future
         [self.navigationItem setRightBarButtonItems:@[menuButton] animated:YES];
+        
+        [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     }
 }
 
