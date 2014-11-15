@@ -31,6 +31,9 @@ UISearchBarDelegate,
 UISearchControllerDelegate,
 UISearchResultsUpdating>
 
+{
+    NSUserDefaults *userDefaults;
+}
 @property NSMutableArray *gameList;
 @property NSDictionary *lastSearchTerm;
 @property (nonatomic, readwrite, weak) id<VGSDataModificationDelegate> gameSearchResultsDelegate;
@@ -77,10 +80,23 @@ UISearchResultsUpdating>
 
 - (void) viewWillAppear:(BOOL)animated
 {
+    
+    
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    if (!gameList) gameList = [gameList init];
-    NSMutableDictionary * requestParams = [[GiantBomb gBasebHttpUrlParams] mutableCopy];
+    if (!gameList) {
+        gameList = [gameList init];
+    }
+    if (!userDefaults) {
+        userDefaults = [NSUserDefaults standardUserDefaults];
+    }
+    
+    NSString *defaultSearchTerms = [userDefaults valueForKey:UserDefaultSearchParams];
     NSString * searchTerm = GameSearchDefaultParam;
+    if (searchTerm.length == 0) {
+        searchTerm = defaultSearchTerms;
+    }
+    
+    NSMutableDictionary * requestParams = [[GiantBomb gBasebHttpUrlParams] mutableCopy];
     searchTerm = [searchTerm stringByAddingPercentEscapesUsingEncoding:
                   NSASCIIStringEncoding];
     [requestParams addEntriesFromDictionary:@{GameHttpQueryParam:searchTerm}]; // Default Search terms
