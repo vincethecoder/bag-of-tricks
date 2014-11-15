@@ -18,7 +18,6 @@
 - (void)setDetailItem:(id)newDetailItem {
     if (_detailItem != newDetailItem) {
         _detailItem = newDetailItem;
-        // Update the view.
         [self configureView];
     }
 }
@@ -39,17 +38,11 @@
 
 - (void)configureView {
     self.detailDescriptionLabel.text = @"";
-    NSString *strURL = @"http://www.giantbomb.com/404";
     NSString *navTitle = @"Giant Bomb - 404";
     if (selectedGame) {
-        strURL = selectedGame.detailURL;
         navTitle = selectedGame.name;
     }
     self.navigationItem.title = navTitle;
-    //load url into webview
-    NSURL *url = [NSURL URLWithString:strURL];
-    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
-    [self.webView loadRequest:urlRequest];
     
 }
 
@@ -57,7 +50,61 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     [self configureView];
+    [self configureWebView];
+    [self loadAddressURL];
 }
+
+- (void)loadAddressURL {
+    NSString *strURL = @"http://www.giantbomb.com/404";
+    if (selectedGame) {
+        strURL = selectedGame.detailURL;
+    }
+    //load url into webview
+    NSURL *url = [NSURL URLWithString:strURL];
+    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+    [self.webView loadRequest:urlRequest];
+}
+
+#pragma mark - Configuration
+- (void)configureWebView {
+    self.webView.backgroundColor = [UIColor whiteColor];
+    self.webView.scalesPageToFit = YES;
+    self.webView.dataDetectorTypes = UIDataDetectorTypeAll;
+}
+
+
+#pragma mark - UIWebViewDelegate
+- (void)webViewDidStartLoad:(UIWebView *)webView
+{
+    // starting the load, show the activity indicator in the status bar
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    // finished loading, hide the activity indicator in the status bar
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
+    // Report the error inside the web view.
+    NSString *localizedErrorMessage = NSLocalizedString(@"An error occured:", nil);
+    NSString *errorFormatString = @"<!doctype html><html><body><div style=\"width: 100%%; text-align: center; font-size: 36pt;\">%@%@</div></body></html>";
+    
+    NSString *errorHTML = [NSString stringWithFormat:errorFormatString, localizedErrorMessage, error.localizedDescription];
+    [self.webView loadHTMLString:errorHTML baseURL:nil];
+    
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+}
+
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    self.webView.delegate = nil;    // disconnect the delegate as the webview is hidden
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

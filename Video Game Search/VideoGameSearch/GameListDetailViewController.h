@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "SearchResult.h"
 
-@interface GameListDetailViewController : UIViewController
+@interface GameListDetailViewController : UIViewController<UIWebViewDelegate>
 
 @property (strong, nonatomic) id detailItem;
 @property (strong, nonatomic) SearchResult *selectedGame;
