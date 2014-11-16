@@ -16,6 +16,7 @@ extern NSString * GameDetailIdentifier;
 extern NSString * GameSearchDefaultParam;
 extern NSString * GameHttpQueryParam;
 extern NSString * UserDefaultSearchParams;
+extern NSString * GameSettingsMenuDismissed;
 
 + (NSString *)convertDictParamsToString:(NSDictionary *)dictData;
 + (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize;

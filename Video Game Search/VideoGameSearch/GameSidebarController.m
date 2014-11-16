@@ -7,10 +7,12 @@
 //
 
 #import "GameSidebarController.h"
+#import "SWRevealViewController.h"
 #import "VGSUtils.h"
 
 @interface GameSidebarController () {
     NSUserDefaults *userDefaults;
+    NSNotificationCenter *notificationCenter;
 }
 @end
 
@@ -23,7 +25,26 @@
 
     [self searchFieldImage];
     
+    if (!notificationCenter)
+        notificationCenter = [NSNotificationCenter defaultCenter];
+    
+    searchTextField.delegate = self;
+    
     self.clearsSelectionOnViewWillAppear = NO;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (textField == searchTextField) {
+        [textField resignFirstResponder];
+        [notificationCenter postNotificationName:GameSettingsMenuDismissed object:self.revealViewController];
+        return NO;
+    }
+    return YES;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    textField.placeholder = nil;
+    textField.text = @"";
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -62,6 +83,8 @@
         [userDefaults setValue:searchTerms forKey:UserDefaultSearchParams];
     }
 }
+
+
 
 - (UIImage *)imageWithImage:(UIImage *)image scaledToRect:(CGRect)rect
 {

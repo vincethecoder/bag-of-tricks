@@ -14,6 +14,7 @@ NSString * GameDetailIdentifier     = @"showDetail";
 NSString * GameSearchDefaultParam   = @""; //Examples Video Games, Nintendo, xBox ONE, PS4
 NSString * GameHttpQueryParam       = @"query";
 NSString * UserDefaultSearchParams  = @"userSearchTerms";
+NSString * GameSettingsMenuDismissed= @"SettingsMenuDismissed";
 
 @implementation VGSUtils
 

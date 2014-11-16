@@ -25,14 +25,14 @@ typedef NS_ENUM(NSInteger, GameSubviewsIndex) {
 
 
 @interface GameListController () <VGSDataModificationDelegate,
-UITableViewDataSource,
-UITableViewDelegate,
-UISearchBarDelegate,
-UISearchControllerDelegate,
-UISearchResultsUpdating>
-
+                                        UITableViewDataSource,
+                                        UITableViewDelegate,
+                                        UISearchBarDelegate,
+                                        UISearchControllerDelegate,
+                                        UISearchResultsUpdating>
 {
     NSUserDefaults *userDefaults;
+    NSNotificationCenter *notificationCenter;
 }
 @property NSMutableArray *gameList;
 @property NSDictionary *lastSearchTerm;
@@ -87,10 +87,18 @@ UISearchResultsUpdating>
     if (!userDefaults) {
         userDefaults = [NSUserDefaults standardUserDefaults];
     }
+    if (!notificationCenter) {
+        notificationCenter = [NSNotificationCenter defaultCenter];
+    }
     
+    [self triggerSearchActionWithNewParams: NO];
+}
+
+- (void)triggerSearchActionWithNewParams:(BOOL)newUserParams
+{
     NSString *defaultSearchTerms = [userDefaults valueForKey:UserDefaultSearchParams];
     NSString * searchTerm = GameSearchDefaultParam;
-    if (searchTerm.length == 0 && lastSearchTerm.count == 0) {
+    if (newUserParams || (searchTerm.length == 0 && lastSearchTerm.count == 0)) {
         searchTerm = defaultSearchTerms;
     }
     
@@ -134,8 +142,7 @@ UISearchResultsUpdating>
 - (void)updateGameList:(GiantBomb *)searchResults
 {
     [self invokeRefreshControl];
-    
-    //searchController.active = NO;
+
     if (searchResults && searchResults.results && searchResults.results.count > 0) {
         gameList = [searchResults.results mutableCopy];
     }
@@ -184,6 +191,25 @@ UISearchResultsUpdating>
     [self setupSearchController];
     
     gameDetailViewController = (GameListDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
+    
+    if (!notificationCenter)
+        notificationCenter = [NSNotificationCenter defaultCenter];
+    
+     [notificationCenter addObserver:self selector:@selector(dismissSettingsMenu:) name:GameSettingsMenuDismissed object:nil];
+}
+
+- (void)dismissSettingsMenu:(NSNotificationCenter *)notification
+{
+    VGSBlockWeakSelf blockSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        GameListController *weakSelf = blockSelf;
+        if (!weakSelf) return;
+        if (!(weakSelf.view.window && [weakSelf isViewLoaded] && weakSelf.navigationItem.rightBarButtonItem)) {
+            [weakSelf createMenuButton:weakSelf];
+        }
+        [weakSelf.revealViewController performSelector:@selector(rightRevealToggle:) withObject:weakSelf.navigationItem.rightBarButtonItem];
+        [weakSelf triggerSearchActionWithNewParams:YES];
+    });
 }
 
 - (void)invokeRefreshControl
@@ -217,7 +243,7 @@ UISearchResultsUpdating>
     searchController.dimsBackgroundDuringPresentation = YES;
     searchController.searchBar.delegate = self;
     
-    //searchController.active = NO;
+    searchController.active = NO;
     
     self.definesPresentationContext = YES;
 }
@@ -377,19 +403,22 @@ UISearchResultsUpdating>
     self.navigationItem.leftBarButtonItem = mainLogo;
     
     if (IS_IPHONE && !IS_IPHONE_6PLUS) {
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        [button setImage:[UIImage imageNamed:@"menu48.png"] forState:UIControlStateNormal];
-        [button setFrame:CGRectMake(0, 0, 28.0f, 24.0f)];
-        [button addTarget:self.revealViewController action:@selector(rightRevealToggle:) forControlEvents:UIControlEventTouchUpInside];
-        
-        UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithCustomView:button];
-        [menuButton setIsAccessibilityElement:YES];
-        [menuButton setAccessibilityLabel:@"menuButton"];
-        /// Allows to add multiple buttons in the future
-        [self.navigationItem setRightBarButtonItems:@[menuButton] animated:YES];
-        
-        [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+        [self createMenuButton:self];
     }
+}
+
+- (void)createMenuButton:(GameListController *)controller
+{
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setImage:[UIImage imageNamed:@"menu48.png"] forState:UIControlStateNormal];
+    [button setFrame:CGRectMake(0, 0, 28.0f, 24.0f)];
+    [button addTarget:self.revealViewController action:@selector(rightRevealToggle:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithCustomView:button];
+    [menuButton setIsAccessibilityElement:YES];
+    [menuButton setAccessibilityLabel:@"menuButton"];
+    /// Allows to add multiple buttons in the future
+    [controller.navigationItem setRightBarButtonItems:@[menuButton] animated:YES];
+    [controller.view addGestureRecognizer:controller.revealViewController.panGestureRecognizer];
 }
 
 - (void)configureNoMatchFoundView
