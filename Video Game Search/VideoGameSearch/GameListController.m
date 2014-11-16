@@ -80,8 +80,6 @@ UISearchResultsUpdating>
 
 - (void) viewWillAppear:(BOOL)animated
 {
-    
-    
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     if (!gameList) {
         gameList = [gameList init];
@@ -92,7 +90,7 @@ UISearchResultsUpdating>
     
     NSString *defaultSearchTerms = [userDefaults valueForKey:UserDefaultSearchParams];
     NSString * searchTerm = GameSearchDefaultParam;
-    if (searchTerm.length == 0) {
+    if (searchTerm.length == 0 && lastSearchTerm.count == 0) {
         searchTerm = defaultSearchTerms;
     }
     
@@ -137,7 +135,7 @@ UISearchResultsUpdating>
 {
     [self invokeRefreshControl];
     
-    searchController.active = NO;
+    //searchController.active = NO;
     if (searchResults && searchResults.results && searchResults.results.count > 0) {
         gameList = [searchResults.results mutableCopy];
     }
@@ -181,8 +179,9 @@ UISearchResultsUpdating>
     self.gameTableView.separatorColor = [UIColor colorWithWhite:0.9 alpha:0.6];
     
     [self setupRefreshControl];
-    [self setupSearchController];
     [self configureNoMatchFoundView];
+    
+    [self setupSearchController];
     
     gameDetailViewController = (GameListDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
 }
@@ -208,7 +207,7 @@ UISearchResultsUpdating>
 {
     resultsTableController = [[GameSearchResultsController alloc] init];
     searchController = [[UISearchController alloc] initWithSearchResultsController:resultsTableController];
-    searchController.searchResultsUpdater = self; 
+    searchController.searchResultsUpdater = self;
     [searchController.searchBar sizeToFit];
     searchController.searchBar.placeholder = NSLocalizedString(@"Ex. Nintendo, PS4 or xBox ONE", @"Sample Search Terms");
     gameTableView.tableHeaderView = searchController.searchBar;
@@ -218,7 +217,7 @@ UISearchResultsUpdating>
     searchController.dimsBackgroundDuringPresentation = YES;
     searchController.searchBar.delegate = self;
     
-    searchController.active = NO;
+    //searchController.active = NO;
     
     self.definesPresentationContext = YES;
 }
@@ -251,6 +250,7 @@ UISearchResultsUpdating>
     [requestParams addEntriesFromDictionary:@{GameHttpQueryParam: searchTerm}];
     
     [self requestVideoGames:requestParams];
+    [searchController setActive:NO];
     [searchBar resignFirstResponder];
 }
 
@@ -258,36 +258,27 @@ UISearchResultsUpdating>
 
 - (void)presentSearchController:(UISearchController *)msearchController {
     VGSLogInfo(@"***presentSearchController");
-    [searchController setActive:NO];
-    [searchController resignFirstResponder];
-    
-    
-    // restore the searchController's active state
-    if (searchControllerWasActive) {
-        self.searchController.active = !self.searchControllerWasActive;
-        searchControllerWasActive = NO;
-        
-        if (self.searchControllerSearchFieldWasFirstResponder) {
-            [self.searchController.searchBar becomeFirstResponder];
-            searchControllerSearchFieldWasFirstResponder = NO;
-        }
+    if (msearchController.isActive) {
+        msearchController.active = searchController.active = NO;
     }
+    if ([msearchController.searchBar isFirstResponder])
+        [msearchController.searchBar resignFirstResponder];
 }
 
 
 - (void)willPresentSearchController:(UISearchController *)msearchController {
     VGSLogInfo(@"willPresentSearchController");
-    [searchController.searchBar resignFirstResponder];
+    if ([msearchController.searchBar isFirstResponder])
+        [msearchController.searchBar resignFirstResponder];
     
 }
 
 - (void)didPresentSearchController:(UISearchController *)msearchController {
     VGSLogInfo(@"****didPresentSearchController");
-    [searchController.searchBar resignFirstResponder];
 }
 
 - (void)willDismissSearchController:(UISearchController *)msearchController {
-    VGSLogInfo(@"willDismissSearchController");
+    //VGSLogInfo(@"willDismissSearchController");
 }
 
 - (void)didDismissSearchController:(UISearchController *)searchController {
@@ -295,12 +286,12 @@ UISearchResultsUpdating>
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
-    VGSLogInfo(@"searchBarTextDidBeginEditing");
-    [searchController setActive:NO];
+
 }
 
 - (BOOL)searchDisplayController:(UISearchController *)controller shouldReloadTableForSearchString:(NSString *)searchString
 {
+    VGSLogInfo(@"shouldReloadTableForSearchString");
     return NO;
 }
 
@@ -311,19 +302,20 @@ UISearchResultsUpdating>
 - (void)searchBar:(UISearchBar *)searchBar activate:(BOOL) active
 {
     VGSLogInfo(@"searchBar - activate");
-    [searchBar setShowsCancelButton:active animated:YES];
+//    [searchBar setShowsCancelButton:active animated:YES];
 }
 
 #pragma mark - UISearchResultsUpdating
 
-- (void)updateSearchResultsForSearchController:(UISearchController *)searchController
+- (void)updateSearchResultsForSearchController:(UISearchController *)msearchController
 {
-    VGSLogInfo(@"updateSearchResultsForSearchController");
+    //VGSLogInfo(@"updateSearchResultsForSearchController");
+
 }
 
 - (void) searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-    VGSLogInfo(@"searchBar - textDidChange");
+    //VGSLogInfo(@"searchBar - textDidChange");
 }
 
 - (void)didReceiveMemoryWarning {
